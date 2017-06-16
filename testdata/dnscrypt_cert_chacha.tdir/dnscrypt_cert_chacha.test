@@ -67,7 +67,7 @@ do
     # Plaintext query on dnscrypt port returns cert when asking for providername/TXT.
     # Check that it returns 1.cert.
     echo "> dig TXT 2.dnscrypt-cert.example.com. 1_salsa.CERT. DNSCrypt plaintext ${opt}"
-    dig ${opt} @127.0.0.1 -p $DNSCRYPT_PORT 2.dnscrypt-cert.example.com. TXT | tee outfile
+    dig ${opt} @127.0.0.1 -p $DNSCRYPT_PORT 2.dnscrypt-cert.example.com. TXT | sed 's#\\;#;#g' | tee outfile
     echo "> cat logfiles"
     cat fwd.log
     cat unbound.log
@@ -82,7 +82,7 @@ do
     # Plaintext query on dnscrypt port returns cert when asking for providername/TXT.
     # Check that it returns 2.cert.
     echo "> dig TXT 2.dnscrypt-cert.example.com. 2_salsa.CERT. DNSCrypt plaintext ${opt}"
-    dig ${opt} @127.0.0.1 -p $DNSCRYPT_PORT 2.dnscrypt-cert.example.com. TXT | tee outfile
+    dig ${opt} @127.0.0.1 -p $DNSCRYPT_PORT 2.dnscrypt-cert.example.com. TXT | sed 's#\\;#;#g' | tee outfile
     echo "> cat logfiles"
     cat fwd.log
     cat unbound.log
@@ -97,7 +97,7 @@ do
     # Plaintext query on dnscrypt port returns cert when asking for providername/TXT.
     # Check that it returns 2_chacha.cert
     echo "> dig TXT 2.dnscrypt-cert.example.com. 2_CHACHA.CERT. DNSCrypt plaintext ${opt}"
-    dig ${opt} @127.0.0.1 -p $DNSCRYPT_PORT 2.dnscrypt-cert.example.com. TXT | tee outfile
+    dig ${opt} @127.0.0.1 -p $DNSCRYPT_PORT 2.dnscrypt-cert.example.com. TXT | sed 's#\\;#;#g' | tee outfile
     echo "> cat logfiles"
     cat fwd.log
     cat unbound.log
@@ -114,7 +114,7 @@ do
     # Certificates are local-data for unbound. We can also retrieve them from unbound
     # port.
     echo "> dig TXT 2.dnscrypt-cert.example.com. 1_salsa.CERT. Unbound ${opt}"
-    dig ${opt} @127.0.0.1 -p $UNBOUND_PORT 2.dnscrypt-cert.example.com. TXT | tee outfile
+    dig ${opt} @127.0.0.1 -p $UNBOUND_PORT 2.dnscrypt-cert.example.com. TXT | sed 's#\\;#;#g' | tee outfile
     echo "> cat logfiles"
     cat fwd.log
     cat unbound.log

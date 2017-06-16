@@ -1,0 +1,32 @@
+dist: trusty
+sudo: true
+
+language: c
+
+compiler:
+ - clang
+ - gcc
+
+env:
+  - WITH_DNSC=--enable-dnscrypt LIBSODIUM=1.0.11 DNSCRYPT_PROXY=1.9.5
+  - WITH_DNSC=--enable-dnscrypt LIBSODIUM=1.0.12 DNSCRYPT_PROXY=1.9.5
+  - WITH_DNSC=--enable-dnscrypt LIBSODIUM=stable DNSCRYPT_PROXY=1.9.5
+  - WITH_DNSC=
+
+before_install:
+ - $CC --version
+ - which $CC
+ # workaround clang not system wide, fail on sudo make install
+ - export CC=`which $CC`
+
+before_script:
+ - sudo apt-get install libevent-dev dnsutils ldnsutils
+ - ./.build_libsodium.sh
+
+script:
+ - autoreconf -vi --force
+ - ./configure --with-libevent=yes ${WITH_DNSC}
+ - bison -d -o util/configparser.c util/configparser.y
+ - make -j 2
+ - make -j 2 test
+ - ./.travis.sh
